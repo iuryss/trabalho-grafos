@@ -1,4 +1,5 @@
 import numpy as np
+import math
 
 grafo1 = [
     [0, 1, 1, 0, 0, 1, 1],
@@ -44,7 +45,7 @@ def tem_dirac(matriz):
     graus = np.sum(matriz, axis=1)
     if(len(graus) < 3):
         return False
-    min_grau = 3.5
+    min_grau = math.ceil(len(graus)/2)
 
     for grau in graus:
         if(grau >= min_grau):
@@ -96,6 +97,19 @@ def tem_bondy_chvatal(matriz):
                 if(soma >= n):
                     copia_matriz[i][j] = 1
                     copia_matriz[j][i] = 1
+                    graus[i] += 1
+                    graus[j] += 1 
+                    for k in range(i):
+                        for m in range(j):
+                            if(k == m): 
+                                continue
+                            if(copia_matriz[k][m] == 0):
+                                sub_soma = graus[k]+graus[m]
+
+                                if(sub_soma >= n):
+                                    copia_matriz[k][m] = 1
+                                    copia_matriz[m][k] = 1
+
 
     for i in range(n):
         for j in range(n):
