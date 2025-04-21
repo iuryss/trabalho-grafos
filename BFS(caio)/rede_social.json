@@ -1,0 +1,13 @@
+{
+    "Alice": ["Bob", "Carol"],
+    "Bob": ["Alice", "David"],
+    "Carol": ["Alice", "Eve"],
+    "David": ["Bob", "Frank"],
+    "Eve": ["Carol", "Grace"],
+    "Frank": ["David"],
+    "Grace": ["Eve", "Heidi"],
+    "Heidi": ["Grace", "Ivan"],
+    "Ivan": ["Heidi", "Judy"],
+    "Judy": ["Ivan"]
+  }
+  
