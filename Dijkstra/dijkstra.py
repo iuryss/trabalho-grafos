@@ -11,31 +11,54 @@ grafo = {
 }
 
 def dijkstra(grafo, origem, destino):
-    fila = [(0, origem, [])]  # (custo atual, vértice atual, caminho até aqui)
+    if origem not in grafo or destino not in grafo:
+        return None, float("inf"), {}
+
+    fila = [(0, origem)]
     visitados = set()
+    distancias = {origem: 0}
+    pais = {origem: None}
 
     while fila:
-        custo, atual, caminho = heapq.heappop(fila)
+        custo, atual = heapq.heappop(fila)
 
         if atual in visitados:
             continue
 
-        caminho = caminho + [atual]
         visitados.add(atual)
 
         if atual == destino:
-            return caminho, custo
+            break
 
         for vizinho, peso in grafo.get(atual, []):
-            if vizinho not in visitados:
-                heapq.heappush(fila, (custo + peso, vizinho, caminho))
+            novo_custo = custo + peso
+            if vizinho not in distancias or novo_custo < distancias[vizinho]:
+                distancias[vizinho] = novo_custo
+                pais[vizinho] = atual
+                heapq.heappush(fila, (novo_custo, vizinho))
 
-    return None, float("inf")  # se não encontrar caminho
+    caminho = []
+    atual = destino
+    while atual is not None:
+        caminho.insert(0, atual)
+        atual = pais.get(atual)
 
-origem = "Centro"
-destino = "Messejana"
+    if caminho and caminho[0] == origem:
+        return caminho, distancias[destino], pais
+    else:
+        return None, float("inf"), {}
 
-caminho, custo_total = dijkstra(grafo, origem, destino)
+def mostrar_resultado(origem, destino):
+    caminho, custo_total, pais = dijkstra(grafo, origem, destino)
 
-print("Caminho mais curto:", " -> ".join(caminho))
-print("Custo total (em minutos):", custo_total)
+    if caminho:
+        print(f"Caminho mais curto de {origem} até {destino}: {' -> '.join(caminho)}")
+        print(f"Custo total (em minutos): {custo_total}")
+        print("\nPais de cada nó no caminho:")
+        for no in caminho[1:]:  # ignorar origem pois não tem pai
+            print(f"{no} veio de {pais[no]}")
+    else:
+        print(f"Não foi possível encontrar um caminho de {origem} até {destino}.")
+
+# Exemplo de uso
+mostrar_resultado("Centro", "Messejana")
