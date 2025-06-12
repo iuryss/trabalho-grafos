@@ -26,7 +26,7 @@ class FloydWarshall:
                 for j in range(self.n):
                     if self.d[i][k] + self.d[k][j] < self.d[i][j]:
                         self.d[i][j] = self.d[i][k] + self.d[k][j]
-                        self.p[i][j] = self.p[k][j]
+                        self.p[i][j] = k
 
     def reconstruir_caminho(self, i, j):
         if self.d[i][j] == math.inf:
@@ -39,7 +39,7 @@ class FloydWarshall:
             caminho.insert(0, j)
         return caminho
 
-    def mostrar_matriz(self, M):
+    def mostrar_distancias(self, M):
         for linha in M:
             nova_linha = []
             for x in linha:
@@ -50,13 +50,25 @@ class FloydWarshall:
             print(nova_linha)
 
         print()
+    
+    def mostrar_predecessores(self, p):
+        for linha in p:
+            nova_linha = []
+            for x in linha:
+                if x == None:
+                    nova_linha.append(None)
+                else:
+                    nova_linha.append(x+1)
+            print(nova_linha)
+
+        print()
 
     def mostrar_resultados(self):
         print("Matriz de distâncias mínimas (dn):")
-        self.mostrar_matriz(self.d)
+        self.mostrar_distancias(self.d)
 
         print("Matriz de predecessores (pn):")
-        self.mostrar_matriz(self.p)
+        self.mostrar_predecessores(self.p)
 
         print("Caminhos mínimos entre todos os centros:")
 
@@ -88,6 +100,11 @@ W = [
     [math.inf, math.inf, math.inf, 5, 0]
 ]
 
-fw = FloydWarshall(W)
+x =[
+    [0,4,11],
+    [6,0,2],
+    [3,math.inf,0]
+]
+fw = FloydWarshall(x)
 fw.rodar_algoritmo()
 fw.mostrar_resultados()
